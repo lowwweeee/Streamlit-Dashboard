@@ -20,15 +20,18 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # File uploader
-uploaded_file = st.file_uploader(
-    "📂 Upload Hot Wheels Sales Data", type=["csv", "xlsx", "xls"])
+uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx", "xls"])
 
 if uploaded_file is not None:
-    file_type = uploaded_file.name.split('.')[-1]
-    if file_type in ['xlsx', 'xls']:
-        df = pd.read_excel(uploaded_file)
+    try:
+        # Use openpyxl engine for modern Excel files
+        df = pd.read_excel(uploaded_file, engine="openpyxl")
+        st.success("File uploaded successfully!")
+        st.write(df.head())  # show preview
+    except Exception as e:
+        st.error(f"Error reading file: {e}")
     else:
-        df = pd.read_csv(uploaded_file)
+        st.info("Please upload an Excel file to proceed.")
 
     # Ensure numeric columns
     df["Price"] = pd.to_numeric(df["Price"], errors='coerce')
