@@ -3,3 +3,4 @@ plotly
 pandas
 openpyxl
 jinja2
+matplotlib
