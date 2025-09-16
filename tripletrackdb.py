@@ -1,6 +1,7 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+import io
 
 st.set_page_config(page_title="Triple Track Garage - Hot Wheels",
                    page_icon="🚗", layout="wide")
@@ -19,7 +20,32 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# File uploader
+# ---- Download Template Button ----
+template_data = {
+    "Order Date": ["2023-01-15", "2023-02-10"],
+    "Buyer Name": ["John Doe", "Jane Smith"],
+    "Location": ["Manila", "Cebu"],
+    "Class": ["Sports Car", "Truck"],
+    "Price": [250.00, 300.00],
+    "Quantity": [2, 1],
+    "Cost": [150.00, 200.00]
+}
+template_df = pd.DataFrame(template_data)
+
+# Save to Excel in memory
+buffer = io.BytesIO()
+with pd.ExcelWriter(buffer, engine="openpyxl") as writer:
+    template_df.to_excel(writer, index=False, sheet_name="Template")
+buffer.seek(0)
+
+st.download_button(
+    label="⬇️ Download Excel Template",
+    data=buffer,
+    file_name="sales_template.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
+
+# ---- File uploader ----
 uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx", "xls"])
 
 if uploaded_file is not None:
@@ -95,11 +121,6 @@ if uploaded_file is not None:
     # Detailed Data
     st.subheader("📋 Sales Records")
     st.write(filtered_df.style.background_gradient(cmap="Blues"))
-
-    # Download option
-    csv = filtered_df.to_csv(index=False).encode('utf-8')
-    st.download_button('💾 Download Data', data=csv,
-                       file_name="HotWheels_Sales.csv", mime='text/csv')
 
 else:
     st.info("Please upload a CSV or Excel file to view the dashboard.")
