@@ -91,7 +91,7 @@ if uploaded_file is not None:
 
     # Detailed Data
     st.subheader("📋 Sales Records")
-    st.dataframe(filtered_df.style.background_gradient(cmap="Blues"))
+    st.write(filtered_df.style.background_gradient(cmap="Blues"))
 
     # Download option
     csv = filtered_df.to_csv(index=False).encode('utf-8')
