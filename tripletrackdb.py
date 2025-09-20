@@ -59,27 +59,7 @@ if uploaded_file is not None:
     else:
         st.info("Please upload an Excel file to proceed.")
 
-    # Ensure numeric columns
-    df["Price"] = pd.to_numeric(df["Price"], errors='coerce')
-    df["Quantity"] = pd.to_numeric(df["Quantity"], errors='coerce')
-    df["Cost"] = pd.to_numeric(df["Cost"], errors='coerce')
-
-    # Calculate Amount Collected and Profit
-    df["Amount Collected"] = df["Price"] * df["Quantity"]
-    df["Profit"] = (df["Price"] - df["Cost"]) * df["Quantity"]
-
-    # Sidebar filters
-    st.sidebar.header("🔎 Filters")
-    location = st.sidebar.multiselect(
-        "Select Location", df["Location"].unique())
-    car_class = st.sidebar.multiselect("Select Class", df["Class"].unique())
-
-    filtered_df = df.copy()
-    if location:
-        filtered_df = filtered_df[filtered_df["Location"].isin(location)]
-    if car_class:
-        filtered_df = filtered_df[filtered_df["Class"].isin(car_class)]
-
+  
     # KPI Section
     st.subheader("📊 Key Metrics")
     col1, col2, col3, col4 = st.columns(4)
