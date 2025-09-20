@@ -52,12 +52,11 @@ if uploaded_file is not None:
     try:
         # Use openpyxl engine for modern Excel files
         df = pd.read_excel(uploaded_file, engine="openpyxl")
-        st.success("File uploaded successfully!")
-        st.write(df.head())  # show preview
+        st.success("✅ File uploaded successfully!")
+        # st.write(df.head())  # ❌ Removed preview
     except Exception as e:
-        st.error(f"Error reading file: {e}")
-    else:
-        st.info("Please upload an Excel file to proceed.")
+        st.error(f"❌ Error reading file: {e}")
+
 # Ensure numeric columns
     df["Price"] = pd.to_numeric(df["Price"], errors='coerce')
     df["Quantity"] = pd.to_numeric(df["Quantity"], errors='coerce')
